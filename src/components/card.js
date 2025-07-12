@@ -1,16 +1,21 @@
-
 const template = document.querySelector('#card-template').content;
 
-function removeCard(cardElement) {
+export function deleteCard(cardElement) {
   cardElement.remove(); // Удаляет элемент карточки из DOM
+};
+
+export function likeCard(likeButton) {
+    likeButton.classList.toggle("card__like-button_is-active");
 }
 
-function createCard(cardData, onDelete) {
+export function createCard(cardData, onDelete, deleteFunction, likeFunction) {
   const clonedTemplate = template.querySelector('.card').cloneNode(true);
 
   // Получаем вложенные элементы
   const titleElement = clonedTemplate.querySelector(".card__title");
   const imageElement = clonedTemplate.querySelector(".card__image");
+  const likeButton = cardElement.querySelector('.card__like-button');
+  const deleteButton = cardElement.querySelector('.card__delete-button');
 
   // Устанавливаем значения
   titleElement.textContent = cardData.name;
@@ -23,13 +28,16 @@ function createCard(cardData, onDelete) {
     onDelete(clonedTemplate); // Вызываем колбэк с элементом карточки
   });
 
+  deleteButton.addEventListener('click', () => {
+        deleteFunction(cardElement);
+    });
+
+  likeButton.addEventListener('click', () => {
+        likeFunction(likeButton);
+    });
+
+    cardImage.addEventListener('click', () =>
+        onCardClickFunction(cardData.name, cardData.link));
   return clonedTemplate;
 }
 
-// Перебор карточек
-const placesList = document.querySelector(".places__list");
-
-initialCards.forEach((cardData) => {
-  const card = createCard(cardData, removeCard); // Передаём removeCard в качестве колбека
-  placesList.appendChild(card);
-});
