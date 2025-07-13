@@ -19,12 +19,6 @@ const popupCaption = imagePopup.querySelector('.popup__caption');
 // Контейнер с карточками
 const placesList = document.querySelector('.places__list');
 
-// показать все карточки
-initialCards.forEach((cardData) => {
-  const card = createCard(cardData, removeCard); // Передаём removeCard в качестве колбека
-  placesList.appendChild(card);
-});
-
 const addButton =  document.querySelector('.profile__add-button'); // Кнопка доб-ия карточек
 const addPopup =   document.querySelector('.popup_type_new-card'); // Доб-ие карточки
 
@@ -33,7 +27,7 @@ const popUps = document.querySelectorAll(".popup"); // Попапы
 const editPopup =   document.querySelector('.popup_type_edit'); // Ред-ие
 
 
-function openCardPopup(link, name) {
+function openCardPopup({link, name}) {
   popupCaption.textContent = name;
   popupImage.alt = name;
   popupImage.src = link;
@@ -51,7 +45,7 @@ function handleNewPlaceFormSubmit(evt) {
   const name = cardNameInput.value;
   const link = urlInput.value;
 
-  const cardElement = createCard(name, link, cardCallbacks);
+  const cardElement = createCard({name, link}, cardCallbacks);
   placesList.prepend(cardElement);
   closeModal(addPopup);
 }
@@ -75,7 +69,7 @@ addButton.addEventListener("click", () => {
 })
 
 popUps.forEach((popup) => {
-  const closeCross = popup.querySelector('.popup_close');
+  const closeCross = popup.querySelector(".popup_close");
   closeCross.addEventListener("click", () => {
     closeModal(popup);
   })
@@ -84,7 +78,12 @@ popUps.forEach((popup) => {
   popup.classList.add("popup_is-animated");
 })
 
-formNewPlace.addEventListener("submit", (evt) => 
-handleNewPlaceFormSubmit);
+formNewPlace.addEventListener("submit", handleNewPlaceFormSubmit);
 
 formEditProfile.addEventListener("submit", handleEditFormSubmit);
+
+// показать все карточки
+initialCards.forEach((cardData) => {
+  const card = createCard(cardData, cardCallbacks); // Передаём removeCard в качестве колбека
+  placesList.appendChild(card);
+});
