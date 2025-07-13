@@ -1,43 +1,41 @@
-const template = document.querySelector('#card-template').content;
+// описаны функции для работы с карточками: функция создания карточки, функции-обработчики событий удаления и лайка карточки;
+// добавление карточек на страницу выполнено перебором массива с данными карточек с помощью цикла. используется метод .forEach или цикл for…of.
+const cardTemplate = document.getElementById('card-template').content.querySelector('.card');
 
+//Функция удаления карточки
 export function deleteCard(cardElement) {
-  cardElement.remove(); // Удаляет элемент карточки из DOM
+    cardElement.remove();
 };
 
+// Переключает состояние лайка
 export function likeCard(likeButton) {
-    likeButton.classList.toggle("card__like-button_is-active");
-}
+  likeButton.classList.toggle('card__like-button_is-active'); 
+};
 
-export function createCard(cardData, onDelete, deleteFunction, likeFunction) {
-  const clonedTemplate = template.querySelector('.card').cloneNode(true);
-
-  // Получаем вложенные элементы
-  const titleElement = clonedTemplate.querySelector(".card__title");
-  const imageElement = clonedTemplate.querySelector(".card__image");
-  const likeButton = cardElement.querySelector('.card__like-button');
-  const deleteButton = cardElement.querySelector('.card__delete-button');
-
-  // Устанавливаем значения
-  titleElement.textContent = cardData.name;
-  imageElement.alt = cardData.name;
-  imageElement.src = cardData.link;
-
-  // Добавляем обработчик клика на карточку
-  const deleteIcon = clonedTemplate.querySelector(".card__delete-button");
-  deleteIcon.addEventListener("click", () => {
-    onDelete(clonedTemplate); // Вызываем колбэк с элементом карточки
-  });
-
-  deleteButton.addEventListener('click', () => {
-        deleteFunction(cardElement);
+//Основная функция создания карточки
+export function createCard(dataObject, {onDeleteCard, onLikeCard, onOpenView}) {
+    const cardElement = cardTemplate.cloneNode(true);  // Клонируем шаблон
+    // Получаем элементы карточки
+    const cardImage = cardElement.querySelector('.card__image');
+    const cardTitle = cardElement.querySelector('.card__title');
+    const cardDeleteButton = cardElement.querySelector('.card__delete-button');
+    const likeButton = cardElement.querySelector('.card__like-button');
+    // Заполняем данными
+    cardImage.src = dataObject.link;
+    cardImage.alt = dataObject.name;
+    cardTitle.textContent = dataObject.name;
+    // Назначаем обработчики событий
+    cardDeleteButton.addEventListener('click', () => {
+        onDeleteCard(cardElement);
     });
 
-  likeButton.addEventListener('click', () => {
-        likeFunction(likeButton);
+    likeButton.addEventListener('click', () => {
+        onLikeCard(likeButton);
     });
 
-    cardImage.addEventListener('click', () =>
-        onCardClickFunction(cardData.name, cardData.link));
-  return clonedTemplate;
-}
+    cardImage.addEventListener("click", () => {
+    onOpenView(dataObject);
+    });
 
+    return cardElement; 
+}
