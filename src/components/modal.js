@@ -19,9 +19,9 @@ export function openModal(modalWindow) {
 //Обработчик нажатия клавиши Esc
  function handleEscClose(event) {
      if (event.key === 'Escape') {
-       const modalWindow = document.querySelector(".popup_is-opened");
-     if (modalWindow) {
-       closeModal(modalWindow);
+       const openedPopup = document.querySelector(".popup_is-opened");
+     if (openedPopup) {
+       closeModal(openedPopup);
      }
    }
   }
