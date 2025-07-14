@@ -86,7 +86,7 @@ formNewPlace.addEventListener("submit", handleNewPlaceFormSubmit);
 formEditProfile.addEventListener("submit", handleEditFormSubmit);
 
 // показать все карточки
-initialCards.forEach((cardData, onDelete, likeFunction) => {
+initialCards.forEach((cardData) => {
   const card = createCard(cardData, cardCallbacks); // Передаём removeCard в качестве колбека
   placesList.appendChild(card);
 });

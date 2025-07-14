@@ -33,6 +33,6 @@ export function createCard(cardData, callbacks) {
   });
 
   imageElement.addEventListener('click', () => 
-    callbacks.onCardClickFunction(cardData.name, cardData.link));
+    callbacks.onCardClickFunction(cardData));
   return clonedTemplate;
 }
