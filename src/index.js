@@ -3,6 +3,8 @@ import { initialCards } from './scripts/cards.js'; // импорт картин�
 import { openModal, closeModal, closeOverlay } from './components/modal.js'; // импорт модалок
 import { deleteCard, likeCard, createCard } from './components/card.js';
 
+// Контейнер с карточками
+const placesList = document.querySelector('.places__list');
 // Редактирование профиля
 const formEditProfile = document.forms["edit-profile"];
 const nameInput = formEditProfile.querySelector('.popup__input_type_name');
@@ -16,8 +18,6 @@ const urlInput = formNewPlace.querySelector('.popup__input_type_url');
 const imagePopup =   document.querySelector('.popup_type_image');
 const popupImage = imagePopup.querySelector('.popup__image');
 const popupCaption = imagePopup.querySelector('.popup__caption');
-// Контейнер с карточками
-const placesList = document.querySelector('.places__list');
 
 const addButton =  document.querySelector('.profile__add-button'); // Кнопка доб-ия карточек
 const addPopup =   document.querySelector('.popup_type_new-card'); // Доб-ие карточки
@@ -70,13 +70,16 @@ addButton.addEventListener("click", () => {
 
 popUps.forEach((popup) => {
   const closeCross = popup.querySelector(".popup_close");
-  closeCross.addEventListener("click", () => {
-    closeModal(popup);
-  })
+    if (closeCross) {
+    closeCross.addEventListener("click", () => {
+      closeModal(popup);
+    });
+  }
   popup.addEventListener("click", closeOverlay);
-// Добавляем модификатор popup_is-animated модальному окну 
+  // Добавляем модификатор popup_is-animated модальному окну
   popup.classList.add("popup_is-animated");
-})
+});
+
 
 formNewPlace.addEventListener("submit", handleNewPlaceFormSubmit);
 

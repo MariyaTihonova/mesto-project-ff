@@ -3,15 +3,15 @@ const popupOpenedClass = 'popup_is-opened';
 
 
 //Ф-я открытия модального окна
-export function openModal(modalWindow) {
-    modalWindow.classList.add(popupOpenedClass);
+export function openModal(popupElement) {
+    popupElement.classList.add(popupOpenedClass);
      //Закрытие по Esc
      document.addEventListener('keydown', handleEscClose);
    }
 
    //Ф-я закрытия модального окна
- export function closeModal(modalWindow) {
-    modalWindow.classList.remove(popupOpenedClass);
+ export function closeModal(popupElement) {
+    popupElement.classList.remove(popupOpenedClass);
      //Удаление обработчика событий
      document.removeEventListener('keydown', handleEscClose);
    }
@@ -19,9 +19,9 @@ export function openModal(modalWindow) {
 //Обработчик нажатия клавиши Esc
  function handleEscClose(event) {
      if (event.key === 'Escape') {
-       const modalWindow = document.querySelector(".popup_is-opened");
-     if (modalWindow) {
-       closeModal(modalWindow);
+       const openedPopup = document.querySelector(".popup_is-opened");
+     if (openedPopup) {
+       closeModal(openedPopup);
      }
    }
   }
