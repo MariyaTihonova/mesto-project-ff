@@ -208,3 +208,4 @@ const handleConfirm = (evt) => {
 };
 
 confirmPopup.addEventListener("submit", handleConfirm);
+
