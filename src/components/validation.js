@@ -15,28 +15,37 @@ const hideError = (formElement, inputElement, validationConfig) => {
 }
 
 const validateForm = (formElement, validationConfig) => {
-  const nameInput = formElement.querySelector('.popup__input_type_name');
-  const jobInput = formElement.querySelector('.popup__input_type_description');
-
- // Регулярные выражения для валидации
-  const nameRegex = /^[a-zA-Zа-яА-ЯёЁ0-9\- ]{2,40}$/;
-  const jobRegex = /^[a-zA-Zа-яА-ЯёЁ0-9\- ]{2,200}$/;
-
-  // Проверка поля "Имя"
-  if (!nameRegex.test(nameInput.value)) {
-    showError(formElement, nameInput, "Имя должно быть от 2 до 40 символов и содержать только латинские, кириллические буквы, знаки дефиса и пробелы", validationConfig);
+  const nameInput = formElement.querySelector(validationConfig.inputSelector + '.popup__input_type_name');
+  const jobInput = formElement.querySelector(validationConfig.inputSelector + '.popup__input_type_description');
+// Проверяем существование полей
+    if (!nameInput || !jobInput) {
+        console.error('Не удалось найти необходимые поля ввода.');
+        return;
+    }
+// Проверка поля "Имя"
+  if (!nameInput.validity.valid) {
+    if (nameInput.validity.patternMismatch) {
+      showError(formElement, nameInput, "Имя должно быть от 2 до 40 символов и содержать только латинские, кириллические буквы, знаки дефиса и пробелы", validationConfig);
+  } else if (nameInput.validity.valueMissing) {
+      showError (formElement, nameInput, "Это поле обязательно для заполнения.", validationConfig);
   } else {
-    hideError(formElement, nameInput, validationConfig);
+      hideError(formElement, nameInput, validationConfig);
+  }
   }
 
-  // Проверка поля "О себе"
-  if (!jobRegex.test(jobInput.value)) {
-    showError(formElement, jobInput, "О себе должно быть от 2 до 200 символов и содержать только латинские, кириллические буквы, знаки дефиса и пробелы", validationConfig);
+// Проверка поля "О себе"
+  if (!jobInput.validity.valid) {
+    if (jobInput.validity.patternMismatch) {
+      showError(formElement, jobInput, "О себе должно содержать только латинские и кириллические буквы, знаки дефиса и пробелы.", validationConfig);
+    } else if (jobInput.validity.vallueMissing) {
+      showError (formElement, jobInput, "Это поле обязательно для заполнения.", validationConfig);
+    }
   } else {
     hideError(formElement, jobInput, validationConfig);
   }
 
-  // Управление активностью кнопки "Сохранить"
+
+// Управление активностью кнопки "Сохранить"
   const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);
   toggleButtonState(formElement, validationConfig, buttonElement);
 };
@@ -47,7 +56,7 @@ const toggleButtonState = (formElement, validationConfig, buttonElement) => {
 
   buttonElement.disabled = isInvalid;
   if (isInvalid) {
-    buttonElement.classList.add(validationConfig.inactiveButtonClass);
+    buttonElement.classList.toggle(validationConfig.inactiveButtonClass, isInvalid);
   } else {
       buttonElement.classList.remove(validationConfig.inactiveButtonClass);
   }
@@ -65,13 +74,14 @@ const setEventListeners = (formElement, validationConfig) => {
   toggleButtonState(formElement, validationConfig, buttonElement);
 };
 
-export const enableValidation = (formElement, validationConfig) => {
-  const formList = Array.from(formElement.querySelectorAll(validationConfig.formSelector));
+export const enableValidation = (validationConfig) => {
+  const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
 // Проходим по каждой форме и устанавливаем обработчики событий
   formList.forEach((currentFormElement) => {
     setEventListeners(currentFormElement, validationConfig);
   });
 };
+
 
 export const clearValidation = (formElement, validationConfig) => {
   const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));

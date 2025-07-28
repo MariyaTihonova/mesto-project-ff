@@ -2,7 +2,7 @@ import './index.css'; // добавьте импорт главного файл
 import { initialCards } from './scripts/cards.js'; // импорт картинок
 import { openModal, closeModal, closeOverlay } from './components/modal.js'; // импорт модалок
 import { likeCard, createCard } from './components/card.js';
-import { getUserInfo, getInitialCards, updateUserInfo, addCard, removeCard } from './components/api.js'
+import { getUserInfo, getInitialCards, updateUserInfo, addCard, removeCard, updateAvatar } from './components/api.js'
 import { enableValidation, clearValidation } from './components/validation.js';
 
 // Контейнер с карточками
@@ -30,6 +30,10 @@ const editPopup =   document.querySelector('.popup_type_edit'); // Ред-ие
 const confirmPopup = document.querySelector(".popup_type_confirm");
 const confirmButton = confirmPopup.querySelector(".popup_button");
 const closeButtons = document.querySelectorAll('.popup__close');
+const avatarPopup = document.querySelector('.popup_type_edit-avatar');
+const avatarInput = document.querySelector('#avatar-input');
+const profileAvatar = document.querySelector('.profile__image'); // Элемент, отображающий аватар
+const formEditAvatar = avatarPopup.querySelector('.popup__form');
 
 let userId;
 let cardIdForDeletion = null;
@@ -171,7 +175,9 @@ Promise.all([getUserInfo(), getInitialCards()])
     profileTitle.textContent = userData.name;
     profileDescription.textContent = userData.about;
     if (userData.avatar) {
-      profileImage.style.backgroundImage = `url('${userData.avatar}')`;
+      profileAvatar.style.backgroundImage = `url('${userData.avatar}')`;
+    } else {
+    profileAvatar.style.backgroundImage = '';
     }
     renderCards(cards);
   })
@@ -209,3 +215,34 @@ const handleConfirm = (evt) => {
 
 confirmPopup.addEventListener("submit", handleConfirm);
 
+// Функция для открытия попапа редактирования аватара
+function openAvatarPopup() {
+  openModal(avatarPopup);
+}
+
+// Слушатель для кнопки редактирования аватара
+document.querySelector('.profile__edit-avatar-button').addEventListener('click', openAvatarPopup);
+
+// Обработчик формы редактирования аватара
+formEditAvatar.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  const file = avatarInput.files[0];
+  if (file) {
+    const formData = new FormData();
+    formData.append('avatar', file); // Добавляем файл в FormData
+
+// Вызываем функцию обновления аватара
+updateAvatar(formData)
+  .then((data) => {
+// Обновляем аватар в интерфейсе, если сервер возвращает обновленный объект пользователя
+    profileAvatar.style.backgroundImage = `url('${data.avatar}')`; // Обновляем отображение аватара
+    closeModal(avatarPopup); // Закрываем попап после обновления
+    })
+  .catch((error) => {
+    console.error('Ошибка при обновлении аватара:', error);
+    });
+  } else {
+    console.error('Не выбран файл для загрузки.');
+  }
+});

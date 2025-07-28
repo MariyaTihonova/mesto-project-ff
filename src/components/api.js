@@ -70,3 +70,12 @@ export const toggleLike = (cardId,isLiked) => {
     .then(handleResponse);
 };
 
+// Функция для обновления аватара на сервере
+export function updateAvatar(formData) {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: 'PATCH',
+    headers: {authorization: config.headers.authorization,},
+    body: formData,
+  })
+    .then(handleResponse);
+}

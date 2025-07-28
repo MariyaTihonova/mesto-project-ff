@@ -17,10 +17,10 @@
       <div class="profile__image" style="background-image: url('<%=require('./images/avatar.jpg')%>')"></div>
       <div class="profile__info">
         <h1 class="profile__title">Жак-Ив Кусто</h1>
-        <button class="profile__edit-button" type="button"></button>
+        <button class="profile__edit-button" type="button">Редактировать</button>
         <p class="profile__description">Исследователь океана</p>
       </div>
-      <button class="profile__add-button" type="button"></button>
+      <button class="profile__add-button" type="button">Добавить</button>
     </section>
     <section class="places page__section">
       <ul class="places__list">
@@ -37,10 +37,11 @@
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
       <form class="popup__form" name="edit-profile" novalidate>
-        <input name="name" class="popup__input popup__input_type_name" id="name-input" placeholder="Имя" required>
+        <input name="name" class="popup__input popup__input_type_name" id="name-input" placeholder="Имя"
+        pattern="^[a-zA-Za-яА-ЯёЁ\-\s]+$" minlength="2" maxlength="40" required>
         <span class="name-input-error popup_input-error"></span>
-        <input name="description" class="popup__input popup__input_type_description" id="description-input"
-        placeholder="Занятие" required>
+        <input name="description" class="popup__input popup__input_type_description" id="description-input"placeholder="Занятие"
+        pattern="^[a-zA-Zа-яА-ЯёЕ\-\s]+$" minlength="2" maxlength="200" required>
         <span class="description-input-error popup_input-error"></span>
         <button type="submit" class="button popup_button" disabled>Сохранить</button>
       </form>
@@ -78,7 +79,17 @@
     </div>
   </div>
 </div>
-
+<div class="popup popup_type_edit-avatar">
+  <div class="popup__content">
+    <button type="button" class="popup__close"></button>
+    <h3 class="popup__title">Редактировать аватар</h3>
+    <form class="popup__form" name="edit-avatar" novalidate>
+      <input type="file" class="popup__input" id="avatar-input" accept="image/*" required>
+      <span class="avatar-input-error popup__input-error"></span>
+      <button type="submit" class="button popup__button" disabled>Сохранить</button>
+    </form>
+  </div>
+</div>
 <template id="card-template">
   <li class="places__item card">
     <img class="card__image" src="" alt="" />
