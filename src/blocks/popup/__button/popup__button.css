@@ -36,3 +36,8 @@
   background-color: #fff;
   cursor: pointer;
 }
+
+.popup__button_loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
